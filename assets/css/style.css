@@ -1,7 +1,7 @@
 /* MailTrack System - Vue Pro inspired Bootstrap theme */
 
 :root {
-    --app-font: "Sora", "Segoe UI", system-ui, sans-serif;
+    --app-font: "Courier New", Courier, "Lucida Console", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace;
     --app-primary: #1f4bd6;
     --app-secondary: #6b7280;
     --app-white: #ffffff;
@@ -103,7 +103,7 @@ a:hover {
 }
 
 .topbar-title-text {
-    font-weight: 600;
+    font-weight: 700;
     font-size: 1.05rem;
 }
 

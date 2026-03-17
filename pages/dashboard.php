@@ -52,19 +52,6 @@ include '../includes/header.php';
     }
 </style>
 
-<!-- Dashboard Header -->
-<div class="dashboard-section-white">
-    <div class="row align-items-center">
-        <div class="col">
-            <h1 class="mb-0">
-                <i class="bi bi-speedometer2 me-2"></i>
-                Dashboard
-            </h1>
-            <p class="text-muted">Welcome back! Here's your email tracking summary.</p>
-        </div>
-    </div>
-</div>
-
 <!-- Stats Cards -->
 <div class="dashboard-section-gray">
     <div class="row g-3">
