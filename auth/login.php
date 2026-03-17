@@ -61,7 +61,7 @@ include '../includes/header.php';
                         </div>
 
                         <div class="d-grid">
-                            <button type="submit" class="btn btn-primary btn-lg">
+                            <button type="submit" class="btn btn-outline-success btn-lg">
                                 <i class="bi bi-box-arrow-in-right me-2"></i>
                                 Sign In
                             </button>
@@ -70,7 +70,7 @@ include '../includes/header.php';
 
                     <div class="text-center mt-1">
                         <p class="mb-1 text-muted small">Don't have an account?</p>
-                        <a href="register.php" class="text-green fw-semibold text-decoration-none">
+                        <a href="register.php" class="text-success fw-semibold text-decoration-none">
                             <i class="bi bi-person-plus me-1"></i>Create Account
                         </a>
                     </div>
