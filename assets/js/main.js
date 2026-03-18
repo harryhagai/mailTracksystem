@@ -159,10 +159,88 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
+
+    // Emails page: custom modal handling
+    const modalTriggers = document.querySelectorAll('[data-modal-target]');
+    const modals = document.querySelectorAll('.mt-modal');
+
+    function openModal(modalEl) {
+        if (!modalEl) return;
+        if (modalEl.parentElement !== document.body) {
+            document.body.appendChild(modalEl);
+        }
+        modalEl.classList.add('is-open');
+        modalEl.style.display = 'block';
+        modalEl.setAttribute('aria-hidden', 'false');
+        document.body.classList.add('modal-open');
+    }
+
+    function closeModal(modalEl) {
+        if (!modalEl) return;
+        modalEl.classList.remove('is-open');
+        modalEl.style.display = 'none';
+        modalEl.setAttribute('aria-hidden', 'true');
+        document.body.classList.remove('modal-open');
+    }
+
+    modalTriggers.forEach(function(trigger) {
+        trigger.addEventListener('click', function(e) {
+            const target = trigger.getAttribute('data-modal-target');
+            if (!target) return;
+            const modalEl = document.querySelector(target);
+            if (!modalEl) return;
+
+            if (target === '#editEmailModal') {
+                const id = trigger.getAttribute('data-id') || '';
+                const email = trigger.getAttribute('data-email') || '';
+                const date = trigger.getAttribute('data-date') || '';
+                const idInput = modalEl.querySelector('#edit-email-id');
+                const emailInput = modalEl.querySelector('#edit-email');
+                const dateInput = modalEl.querySelector('#edit-date');
+                if (idInput) idInput.value = id;
+                if (emailInput) emailInput.value = email;
+                if (dateInput) dateInput.value = date;
+            }
+
+            e.preventDefault();
+            openModal(modalEl);
+        });
+    });
+
+    document.addEventListener('click', function(e) {
+        const closeTrigger = e.target.closest('[data-modal-close]');
+        if (!closeTrigger) return;
+        const modalEl = closeTrigger.closest('.mt-modal');
+        closeModal(modalEl);
+    });
+
+    document.addEventListener('keydown', function(e) {
+        if (e.key !== 'Escape') return;
+        const openModalEl = document.querySelector('.mt-modal.is-open');
+        closeModal(openModalEl);
+    });
+
+    if (window.MailTrackEditPrefill) {
+        const modalEl = document.getElementById('editEmailModal');
+        if (modalEl) {
+            const data = window.MailTrackEditPrefill;
+            const idInput = modalEl.querySelector('#edit-email-id');
+            const emailInput = modalEl.querySelector('#edit-email');
+            const dateInput = modalEl.querySelector('#edit-date');
+            if (idInput) idInput.value = data.id || '';
+            if (emailInput) emailInput.value = data.email || '';
+            if (dateInput) dateInput.value = data.due_date || '';
+            openModal(modalEl);
+            window.MailTrackEditPrefill = null;
+        }
+    }
     
     // Add ripple effect to buttons
     const buttons = document.querySelectorAll('.btn');
     buttons.forEach(function(btn) {
+        if (btn.classList.contains('btn-no-ripple')) {
+            return;
+        }
         btn.style.position = 'relative';
         btn.style.overflow = 'hidden';
     });

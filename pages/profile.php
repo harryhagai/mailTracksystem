@@ -131,17 +131,6 @@ include '../includes/header.php';
             </div>
             <div class="card-body">
                 <div class="list-group list-group-flush">
-                    <div class="list-group-item px-0 border-0 py-3">
-                        <div class="row align-items-center mb-2">
-                            <div class="col-auto">
-                                <i class="bi bi-hash text-muted fs-5"></i>
-                            </div>
-                            <div class="col">
-                                <small class="text-muted">User ID</small>
-                                <div class="fw-semibold"><?php echo $_SESSION['user_id']; ?></div>
-                            </div>
-                        </div>
-                    </div>
                     <div class="list-group-item px-0 border-0 py-3 border-top">
                         <div class="row align-items-center mb-2">
                             <div class="col-auto">
@@ -169,43 +158,7 @@ include '../includes/header.php';
         </div>
 
         <!-- Usage Stats -->
-        <div class="card border-0 shadow-sm mb-4">
-            <div class="card-header bg-success text-white">
-                <h6 class="mb-0"><i class="bi bi-bar-chart me-2"></i>Usage Stats</h6>
-            </div>
-            <div class="card-body pt-4">
-                <div class="row text-center">
-                    <div class="col-6 pb-3 border-end">
-                        <div class="fs-3 fw-bold text-primary mb-1">150</div>
-                        <div class="text-muted small">Emails Tracked</div>
-                    </div>
-                    <div class="col-6 pb-3">
-                        <div class="fs-3 fw-bold text-success mb-1">98%</div>
-                        <div class="text-muted small">Success Rate</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Quick Actions -->
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-secondary text-white">
-                <h6 class="mb-0"><i class="bi bi-lightning-charge me-2"></i>Quick Actions</h6>
-            </div>
-            <div class="card-body">
-                <div class="d-grid gap-2">
-                    <a href="dashboard.php" class="btn btn-outline-primary">
-                        <i class="bi bi-speedometer2 me-2"></i>Dashboard
-                    </a>
-                    <a href="emails.php" class="btn btn-outline-success">
-                        <i class="bi bi-inbox me-2"></i>Emails
-                    </a>
-                    <a href="../auth/logout.php" class="btn btn-outline-danger">
-                        <i class="bi bi-box-arrow-right me-2"></i>Logout
-                    </a>
-                </div>
-            </div>
-        </div>
+        
     </div>
 </div>
 

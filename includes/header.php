@@ -1,3 +1,21 @@
+<?php
+$due_notifications = [];
+$due_total = 0;
+if (isset($_SESSION['user_id']) && isset($pdo)) {
+    try {
+        $stmt = $pdo->prepare("SELECT COUNT(*) as total FROM emails WHERE user_id = ? AND due_date <= CURDATE()");
+        $stmt->execute([$_SESSION['user_id']]);
+        $due_total = (int)$stmt->fetch()['total'];
+
+        $stmt = $pdo->prepare("SELECT id, email, due_date FROM emails WHERE user_id = ? AND due_date <= CURDATE() ORDER BY due_date ASC LIMIT 5");
+        $stmt->execute([$_SESSION['user_id']]);
+        $due_notifications = $stmt->fetchAll();
+    } catch (PDOException $e) {
+        $due_notifications = [];
+        $due_total = 0;
+    }
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -39,12 +57,42 @@
                     <div class="topbar-right">
                         <div class="topbar-search d-none d-md-flex">
                             <i class="bi bi-search"></i>
-                            <input class="form-control" type="text" placeholder="Search emails, contacts..." aria-label="Search">
+                            <input id="searchEmail" class="form-control" type="text" placeholder="Search emails, contacts..." aria-label="Search" autocomplete="off">
                         </div>
                         <div class="topbar-actions">
-                            <button class="btn btn-icon btn-ghost" type="button" aria-label="Notifications">
-                                <i class="bi bi-bell"></i>
-                            </button>
+                            <div class="dropdown">
+                                <button class="btn btn-icon btn-ghost btn-no-ripple position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Notifications">
+                                    <i class="bi bi-bell"></i>
+                                    <?php if ($due_total > 0): ?>
+                                        <span class="notification-badge"><?php echo $due_total; ?></span>
+                                    <?php endif; ?>
+                                </button>
+                                <div class="dropdown-menu dropdown-menu-end shadow notification-menu">
+                                    <div class="dropdown-header d-flex justify-content-between align-items-center">
+                                        <span>Due Emails</span>
+                                        <span class="badge bg-success"><?php echo $due_total; ?></span>
+                                    </div>
+                                    <?php if ($due_total > 0): ?>
+                                        <?php foreach ($due_notifications as $item): ?>
+                                            <a class="dropdown-item" href="../pages/emails.php?edit=<?php echo $item['id']; ?>">
+                                                <div class="fw-semibold"><?php echo htmlspecialchars($item['email']); ?></div>
+                                                <div class="small text-muted">Due <?php echo date('M j', strtotime($item['due_date'])); ?></div>
+                                            </a>
+                                        <?php endforeach; ?>
+                                        <?php if ($due_total > count($due_notifications)): ?>
+                                            <div class="dropdown-item text-muted small">
+                                                +<?php echo $due_total - count($due_notifications); ?> more
+                                            </div>
+                                        <?php endif; ?>
+                                    <?php else: ?>
+                                        <div class="dropdown-item text-muted small">No due emails</div>
+                                    <?php endif; ?>
+                                    <div class="dropdown-divider"></div>
+                                    <div class="px-3 pb-2">
+                                        <a class="btn btn-outline-success w-100" href="../pages/emails.php">View All</a>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="dropdown">
                                 <button class="btn btn-icon btn-ghost dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Account">
                                     <i class="bi bi-person-circle"></i>

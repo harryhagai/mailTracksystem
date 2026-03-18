@@ -2,10 +2,10 @@
 
 :root {
     --app-font: "Courier New", Courier, "Lucida Console", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace;
-    --app-primary: #28a745;
-    --app-success: #28a745;
-    --app-blue: #28a745;
-    --app-secondary: #6b7280;
+    --app-primary: #147f02;
+    --app-success: #147f02;
+    --app-blue: #147f02;
+    --app-secondary: #147f02;
     --app-white: #000000;
     --app-primary-rgb: 31, 75, 214;
     --app-secondary-rgb: 107, 114, 128;
@@ -119,15 +119,16 @@ a:hover {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    background: var(--app-surface-alt);
+    background: rgba(20, 127, 2, 0.08);
     border-radius: 999px;
     padding: 0.35rem 0.85rem;
     min-width: 260px;
-    border: 1px solid var(--app-border);
+    border: 1px solid rgba(20, 127, 2, 0.6);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .topbar-search i {
-    color: var(--app-muted);
+    color: #8cff8c;
 }
 
 .topbar-search .form-control {
@@ -137,6 +138,17 @@ a:hover {
     height: auto;
     font-size: 0.9rem;
     box-shadow: none;
+    color: #8cff8c;
+    caret-color: #1bff1b;
+}
+
+.topbar-search .form-control::placeholder {
+    color: rgba(140, 255, 140, 0.6);
+}
+
+.topbar-search:focus-within {
+    border-color: #147f02;
+    box-shadow: 0 0 0 1px rgba(20, 127, 2, 0.6);
 }
 
 .topbar-actions {
@@ -245,14 +257,14 @@ a:hover {
 }
 
 .sidebar-nav .nav-link:hover {
-    color: var(--app-primary);
-    background: rgba(var(--app-primary-rgb), 0.08);
+    color: var(--app-secondary);
+    background: transparent;
 }
 
 .sidebar-nav .nav-link.active {
-    color: var(--app-primary);
-    background: rgba(var(--app-primary-rgb), 0.12);
-    box-shadow: inset 0 0 0 1px rgba(var(--app-primary-rgb), 0.2);
+    color: #147f02;
+    background: transparent;
+    box-shadow: inset 0 0 0 1px rgba(20, 127, 2, 0.6);
 }
 
 .nav-icon {
@@ -371,12 +383,56 @@ a:hover {
 }
 
 .btn-ghost {
-    background: rgba(var(--app-secondary-rgb), 0.08);
-    border: 1px solid transparent;
+    background: transparent;
+    border: 1px solid rgba(20, 127, 2, 0.6);
+    color: #8cff8c;
 }
 
 .btn-ghost:hover {
-    background: rgba(var(--app-secondary-rgb), 0.12);
+    background: transparent;
+}
+
+.notification-badge {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 999px;
+    background: #147f02;
+    color: #000000;
+    font-size: 0.7rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid rgba(20, 127, 2, 0.6);
+    box-shadow: 0 0 8px rgba(20, 127, 2, 0.35);
+    pointer-events: none;
+}
+
+.notification-menu {
+    min-width: 260px;
+    background: #020602;
+    color: #8cff8c;
+    border: 1px solid rgba(20, 127, 2, 0.5);
+}
+
+.notification-menu .dropdown-item {
+    color: #8cff8c;
+}
+
+.notification-menu .dropdown-item:hover {
+    background: rgba(20, 127, 2, 0.12);
+}
+
+.notification-menu .dropdown-divider {
+    border-top-color: rgba(20, 127, 2, 0.3);
+}
+
+.btn-no-ripple {
+    position: relative;
+    overflow: visible !important;
 }
 
 .btn-loading {
@@ -402,7 +458,7 @@ a:hover {
     border: none;
     border-radius: var(--app-radius-md);
     box-shadow: none;
-    background-color: var(--app-surface);
+    background-color: transparent;
 }
 
 .card-header {
@@ -413,43 +469,133 @@ a:hover {
     border-top-right-radius: var(--app-radius-md);
 }
 
+/* Dashboard tiles with green borders */
+.dashboard-section-gray .card {
+    border: 2px solid #28a745 !important;
+    border-radius: var(--app-radius-md);
+    background-color: var(--app-white);
+}
+
+.dashboard-section-gray .card-header {
+    border-bottom: 2px solid #28a745 !important;
+}
+
+.dashboard-section-gray .table {
+    border: 2px solid #28a745 !important;
+    border-top: none !important;
+}
+
+.dashboard-section-gray .table thead th {
+    border-bottom: 2px solid #28a745 !important;
+}
+
+.dashboard-section-gray .table tbody td {
+    border-bottom: 1px solid rgba(40, 167, 69, 0.2) !important;
+}
+
+/* Green text for dashboard tiles */
+.dashboard-section-gray .card-body,
+.dashboard-section-gray .card-title,
+.dashboard-section-gray .card-text,
+.dashboard-section-gray .card-header h5,
+.dashboard-section-gray .table th,
+.dashboard-section-gray .table td {
+    color: #28a745 !important;
+}
+
+/* Red delete button */
+.dashboard-section-gray .btn-danger,
+.dashboard-section-gray .btn-outline-danger {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+    color: white !important;
+}
+
+.dashboard-section-gray .btn-danger:hover,
+.dashboard-section-gray .btn-outline-danger:hover {
+    background-color: #c82333 !important;
+    border-color: #c82333 !important;
+}
+
 /* Forms */
 .form-control,
 .form-select {
-    border-radius: 12px;
+    border-radius: 0;
     border: none;
+    border-bottom: 2px solid var(--app-border);
     padding: 0.55rem 0;
     background: transparent;
+    box-shadow: none;
 }
 
 .form-control:focus,
 .form-select:focus {
-    border-color: transparent;
+    border-bottom-color: var(--app-primary);
     box-shadow: none;
+    outline: none;
 }
 
 .input-group-text {
     background-color: transparent;
     border: none;
+    border-bottom: 2px solid var(--app-border);
+}
+
+.input-group-text:focus {
+    border-bottom-color: var(--app-primary);
+}
+
+/* App input-groups: single underline across icon + input */
+body.app--app .input-group {
+    align-items: center;
+    border-bottom: 2px solid var(--app-border);
+}
+
+body.app--app .input-group:focus-within {
+    border-bottom-color: var(--app-primary);
+}
+
+body.app--app .input-group .form-control,
+body.app--app .input-group .form-select,
+body.app--app .input-group .input-group-text {
+    border-bottom: none !important;
 }
 
 /* Auth page form borders */
 body.app--auth .form-control,
 body.app--auth .form-select {
-    border: 1px solid var(--app-border);
-    padding: 0.55rem 0.75rem;
-    background: var(--app-white);
+    border: none;
+    border-bottom: 2px solid var(--app-border);
+    border-radius: 0;
+    padding: 0.55rem 0;
+    background: transparent;
+    box-shadow: none;
 }
 
 body.app--auth .form-control:focus,
 body.app--auth .form-select:focus {
-    border-color: rgba(var(--app-primary-rgb), 0.6);
-    box-shadow: 0 0 0 0.2rem rgba(var(--app-primary-rgb), 0.12);
+    border-bottom-color: var(--app-primary);
+    box-shadow: none;
+    outline: none;
 }
 
 body.app--auth .input-group-text {
-    border: 1px solid var(--app-border);
-    background: var(--app-surface-alt);
+    border: none;
+    background: transparent;
+    border-bottom: 2px solid var(--app-border);
+}
+
+body.app--auth .input-group-text:focus {
+    border-bottom-color: var(--app-primary);
+}
+
+/* Ensure input group underline works */
+body.app--auth .input-group {
+    position: relative;
+}
+
+body.app--auth .input-group:focus-within .input-group-text {
+    border-bottom-color: var(--app-primary);
 }
 
 /* Tables */
@@ -570,6 +716,70 @@ body.app--auth .input-group-text {
     pointer-events: none;
 }
 
+/* Code Snowfall Animation */
+@keyframes codeSnowfall {
+    0% {
+        transform: translateY(-100px);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh);
+        opacity: 0;
+    }
+}
+
+.code-snow {
+    position: fixed;
+    top: -50px;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.code-snow span {
+    position: absolute;
+    color: var(--app-primary);
+    font-family: var(--app-font);
+    font-size: 0.8rem;
+    opacity: 0.8;
+    animation: codeSnowfall 15s linear infinite;
+    text-shadow: 0 0 5px rgba(var(--app-primary-rgb), 0.3);
+}
+
+/* Left side codes (10 elements) */
+.code-snow span:nth-child(1) { left: 2%; animation-delay: 0s; animation-duration: 12s; }
+.code-snow span:nth-child(2) { left: 6%; animation-delay: 2s; animation-duration: 14s; }
+.code-snow span:nth-child(3) { left: 10%; animation-delay: 4s; animation-duration: 10s; }
+.code-snow span:nth-child(4) { left: 14%; animation-delay: 1s; animation-duration: 13s; }
+.code-snow span:nth-child(5) { left: 18%; animation-delay: 3s; animation-duration: 11s; }
+.code-snow span:nth-child(6) { left: 22%; animation-delay: 5s; animation-duration: 15s; }
+.code-snow span:nth-child(7) { left: 26%; animation-delay: 0s; animation-duration: 12s; }
+.code-snow span:nth-child(8) { left: 30%; animation-delay: 2s; animation-duration: 14s; }
+.code-snow span:nth-child(9) { left: 34%; animation-delay: 4s; animation-duration: 10s; }
+.code-snow span:nth-child(10) { left: 38%; animation-delay: 1s; animation-duration: 13s; }
+
+/* Right side codes (10 elements) */
+.code-snow span:nth-child(11) { right: 2%; left: auto; animation-delay: 3s; animation-duration: 11s; }
+.code-snow span:nth-child(12) { right: 6%; left: auto; animation-delay: 5s; animation-duration: 15s; }
+.code-snow span:nth-child(13) { right: 10%; left: auto; animation-delay: 0s; animation-duration: 12s; }
+.code-snow span:nth-child(14) { right: 14%; left: auto; animation-delay: 2s; animation-duration: 14s; }
+.code-snow span:nth-child(15) { right: 18%; left: auto; animation-delay: 4s; animation-duration: 10s; }
+.code-snow span:nth-child(16) { right: 22%; left: auto; animation-delay: 1s; animation-duration: 13s; }
+.code-snow span:nth-child(17) { right: 26%; left: auto; animation-delay: 3s; animation-duration: 11s; }
+.code-snow span:nth-child(18) { right: 30%; left: auto; animation-delay: 5s; animation-duration: 15s; }
+.code-snow span:nth-child(19) { right: 34%; left: auto; animation-delay: 0s; animation-duration: 12s; }
+.code-snow span:nth-child(20) { right: 38%; left: auto; animation-delay: 2s; animation-duration: 14s; }
+
+
 /* Animations */
 @keyframes fadeUp {
     from {
@@ -599,8 +809,33 @@ body.app--auth .input-group-text {
     }
 }
 
+@keyframes codeType {
+    from {
+        width: 0;
+    }
+    to {
+        width: 100%;
+    }
+}
+
+@keyframes codeBlink {
+    0%, 100% {
+        opacity: 0;
+    }
+    50% {
+        opacity: 1;
+    }
+}
+
 .fade-in {
     animation: fadeIn 0.5s ease-out both;
+}
+
+.code-animation {
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 2px solid var(--app-primary);
+    animation: codeType 2s steps(40, end), codeBlink 0.75s step-end infinite;
 }
 
 /* Sidebar collapse */

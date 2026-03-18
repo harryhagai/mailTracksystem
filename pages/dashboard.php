@@ -7,6 +7,17 @@ if (!isset($_SESSION['user_id'])) {
     exit();
 }
 
+// Prep chart labels for next 7 days
+$chart_labels = [];
+$chart_counts = [];
+$chart_date_keys = [];
+for ($i = 0; $i < 7; $i++) {
+    $date_key = date('Y-m-d', strtotime("+$i day"));
+    $chart_date_keys[] = $date_key;
+    $chart_labels[] = date('M j', strtotime($date_key));
+    $chart_counts[] = 0;
+}
+
 // Get emails due today
 try {
     $stmt = $pdo->prepare("SELECT * FROM emails WHERE user_id = ? AND due_date = CURDATE() ORDER BY created_at DESC");
@@ -22,12 +33,35 @@ try {
     $stmt = $pdo->prepare("SELECT COUNT(*) as overdue FROM emails WHERE user_id = ? AND due_date < CURDATE()");
     $stmt->execute([$_SESSION['user_id']]);
     $overdue = $stmt->fetch()['overdue'];
+
+    // Chart data: follow-ups due in the next 7 days
+    $stmt = $pdo->prepare("
+        SELECT due_date, COUNT(*) as total
+        FROM emails
+        WHERE user_id = ?
+          AND due_date BETWEEN CURDATE() AND DATE_ADD(CURDATE(), INTERVAL 6 DAY)
+        GROUP BY due_date
+        ORDER BY due_date ASC
+    ");
+    $stmt->execute([$_SESSION['user_id']]);
+    $rows = $stmt->fetchAll();
+    $date_index = array_flip($chart_date_keys);
+    foreach ($rows as $row) {
+        $key = $row['due_date'];
+        if (isset($date_index[$key])) {
+            $chart_counts[$date_index[$key]] = (int)$row['total'];
+        }
+    }
     
 } catch(PDOException $e) {
     $due_today = [];
     $total_emails = 0;
     $overdue = 0;
+    $chart_counts = array_fill(0, count($chart_labels), 0);
 }
+
+$due_today_total = count($due_today);
+$due_today_limited = array_slice($due_today, 0, 5);
 ?>
 <?php 
 $page_title = 'Dashboard';
@@ -37,18 +71,90 @@ include '../includes/header.php';
 ?>
 
 <style>
-    .dashboard-section-white {
-        background-color: #ffffff;
+    .dashboard-section-gray {
+        background-color: transparent;
         padding: 2rem;
         border-radius: 0.5rem;
         margin-bottom: 2rem;
     }
-    
-    .dashboard-section-gray {
-        background-color: #f8f9fa;
-        padding: 2rem;
-        border-radius: 0.5rem;
-        margin-bottom: 2rem;
+
+    .hacker-card {
+        background: linear-gradient(135deg, rgba(3, 8, 4, 0.98), rgba(6, 20, 8, 0.98));
+        border: 1px solid rgba(20, 127, 2, 0.4);
+        box-shadow: 0 0 24px rgba(20, 127, 2, 0.25);
+    }
+
+    .hacker-card .card-header {
+        background: transparent;
+        color: #64ff64;
+        border-bottom: 1px solid rgba(20, 127, 2, 0.35);
+    }
+
+    .hacker-chart-wrap {
+        position: relative;
+        height: 320px;
+    }
+
+    .hacker-chart-wrap canvas {
+        position: relative;
+        z-index: 2;
+    }
+
+    .hacker-chart-glow,
+    .hacker-chart-grid {
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        z-index: 1;
+    }
+
+    .hacker-chart-glow {
+        background: radial-gradient(circle at 20% 20%, rgba(20, 127, 2, 0.2), transparent 60%),
+                    radial-gradient(circle at 80% 10%, rgba(20, 255, 20, 0.12), transparent 55%);
+        mix-blend-mode: screen;
+    }
+
+    .hacker-chart-grid {
+        background-image:
+            linear-gradient(rgba(20, 127, 2, 0.12) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(20, 127, 2, 0.12) 1px, transparent 1px);
+        background-size: 24px 24px;
+        opacity: 0.6;
+        mix-blend-mode: screen;
+        animation: hackerGridMove 12s linear infinite;
+    }
+
+    @keyframes hackerGridMove {
+        0% {
+            background-position: 0 0;
+        }
+        100% {
+            background-position: -480px 0;
+        }
+    }
+
+    .dashboard-stat-card .card-body {
+        padding: 0.7rem;
+    }
+
+    .dashboard-stat-card .stat-icon {
+        font-size: 1.15rem;
+        margin-bottom: 0.35rem;
+    }
+
+    .dashboard-stat-card .card-title {
+        font-size: 0.75rem;
+        margin-bottom: 0.2rem;
+    }
+
+    .dashboard-stat-card .card-text {
+        font-size: 1.05rem;
+    }
+
+    .due-today-header {
+        background: transparent;
+        color: #147f02;
+        border: 1px solid #147f02;
     }
 </style>
 
@@ -56,36 +162,36 @@ include '../includes/header.php';
 <div class="dashboard-section-gray">
     <div class="row g-3">
         <div class="col-lg-3 col-md-6">
-            <div class="card border-0 shadow-sm h-100">
+            <div class="card border-0 shadow-sm h-100 dashboard-stat-card">
                 <div class="card-body text-center">
-                    <i class="bi bi-calendar-check text-primary display-6 mb-3 d-block"></i>
+                    <i class="bi bi-calendar-check text-primary stat-icon d-block"></i>
                     <h6 class="card-title mb-2">Due Today</h6>
                     <h2 class="card-text mb-0"><?php echo count($due_today); ?></h2>
                 </div>
             </div>
         </div>
         <div class="col-lg-3 col-md-6">
-            <div class="card border-0 shadow-sm h-100">
+            <div class="card border-0 shadow-sm h-100 dashboard-stat-card">
                 <div class="card-body text-center">
-                    <i class="bi bi-exclamation-triangle text-danger display-6 mb-3 d-block"></i>
+                    <i class="bi bi-exclamation-triangle text-danger stat-icon d-block"></i>
                     <h6 class="card-title mb-2">Overdue</h6>
                     <h2 class="card-text mb-0"><?php echo $overdue; ?></h2>
                 </div>
             </div>
         </div>
         <div class="col-lg-3 col-md-6">
-            <div class="card border-0 shadow-sm h-100">
+            <div class="card border-0 shadow-sm h-100 dashboard-stat-card">
                 <div class="card-body text-center">
-                    <i class="bi bi-envelope text-info display-6 mb-3 d-block"></i>
+                    <i class="bi bi-envelope text-info stat-icon d-block"></i>
                     <h6 class="card-title mb-2">Total Emails</h6>
                     <h2 class="card-text mb-0"><?php echo $total_emails; ?></h2>
                 </div>
             </div>
         </div>
         <div class="col-lg-3 col-md-6">
-            <div class="card border-0 shadow-sm h-100">
+            <div class="card border-0 shadow-sm h-100 dashboard-stat-card">
                 <div class="card-body text-center">
-                    <i class="bi bi-graph-up text-success display-6 mb-3 d-block"></i>
+                    <i class="bi bi-graph-up text-success stat-icon d-block"></i>
                     <h6 class="card-title mb-2">Success Rate</h6>
                     <h2 class="card-text mb-0">95%</h2>
                 </div>
@@ -95,40 +201,55 @@ include '../includes/header.php';
 </div>
 
 <!-- Main Content -->
-<div class="dashboard-section-white">
-    <div class="row g-4">
-        <!-- Due Today Section -->
+<div class="dashboard-section-gray">
+    <div class="row g-4 align-items-stretch">
+        <!-- Hacker Activity Graph (Left) -->
         <div class="col-lg-8">
-            <div class="card border-0 shadow-sm">
-            <div class="card-header bg-primary text-white">
+            <div class="card hacker-card h-100">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="bi bi-activity me-2"></i>Hacker Activity Graph</h5>
+                </div>
+                <div class="card-body">
+                    <div class="hacker-chart-wrap">
+                        <div class="hacker-chart-glow"></div>
+                        <div class="hacker-chart-grid"></div>
+                        <canvas id="hackerChart" aria-label="Follow-up activity graph" role="img"></canvas>
+                    </div>
+                    <div class="d-flex justify-content-between mt-3 text-muted small">
+                        <span>Next 7 days</span>
+                        <span>Green = follow-ups due</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Due Today Section (Right) -->
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+            <div class="card-header due-today-header">
                 <h5 class="mb-0">
                     <i class="bi bi-bell me-2"></i>
-                    Emails Due Today (<?php echo count($due_today); ?>)
+                    Emails Due Today (<?php echo $due_today_total; ?>)
                 </h5>
             </div>
             <div class="card-body p-0">
-                <?php if(count($due_today) > 0): ?>
+                <?php if($due_today_total > 0): ?>
                 <div class="table-responsive">
-                    <table class="table mb-0">
+                    <table class="table mb-0 align-middle">
                         <thead class="bg-light">
                             <tr>
                                 <th class="border-bottom">Email</th>
-                                <th class="border-bottom">Due Date</th>
-                                <th class="border-bottom">Status</th>
-                                <th class="border-bottom">Action</th>
+                                <th class="border-bottom text-end">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <?php foreach($due_today as $email): ?>
+                            <?php foreach($due_today_limited as $email): ?>
                             <tr>
                                 <td>
                                     <strong><?php echo htmlspecialchars($email['email']); ?></strong>
                                 </td>
-                                <td><span class="badge bg-success"><?php echo $email['due_date']; ?></span></td>
-                                <td><span class="badge bg-info">Active</span></td>
-                                <td>
-                                    <a href="emails.php?edit=<?php echo $email['id']; ?>" class="btn btn-sm btn-outline-primary">
-                                        <i class="bi bi-pencil"></i> Edit
+                                <td class="text-end">
+                                    <a href="emails.php?edit=<?php echo $email['id']; ?>" class="btn btn-sm btn-outline-success" title="Update">
+                                        <i class="bi bi-pencil"></i>
                                     </a>
                                 </td>
                             </tr>
@@ -152,47 +273,58 @@ include '../includes/header.php';
     </div>
 </div>
 
-<!-- Quick Actions Section -->
-<div class="dashboard-section-gray">
-    <div class="row g-4">
-        <!-- Quick Actions Sidebar -->
-        <div class="col-lg-4 ms-auto">
-            <div class="card border-0 shadow-sm mb-4">
-            <div class="card-header bg-primary text-white">
-                <h5 class="mb-0"><i class="bi bi-lightning-charge me-2"></i>Quick Add</h5>
-            </div>
-            <div class="card-body">
-                <form action="../actions/add_email.php" method="POST" class="needs-validation" novalidate>
-                    <div class="mb-3">
-                        <label class="form-label">Email Address</label>
-                        <input type="email" name="email" class="form-control" placeholder="e.g. john@example.com" required>
-                    </div>
-                    <div class="mb-3">
-                        <label class="form-label">Follow-up Date</label>
-                        <input type="date" name="due_date" class="form-control" required>
-                    </div>
-                    <button type="submit" class="btn btn-primary w-100">
-                        <i class="bi bi-plus-lg me-2"></i>Add Email
-                    </button>
-                </form>
-            </div>
-        </div>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+(() => {
+    const canvas = document.getElementById('hackerChart');
+    if (!canvas || typeof Chart === 'undefined') return;
 
-        <div class="card border-0 shadow-sm">
-            <div class="card-header bg-secondary text-white">
-                <h5 class="mb-0"><i class="bi bi-link-45deg me-2"></i>Quick Links</h5>
-            </div>
-            <div class="card-body d-grid gap-2">
-                <a href="emails.php" class="btn btn-outline-primary">
-                    <i class="bi bi-list-ul me-2"></i>View All Emails
-                </a>
-                <a href="profile.php" class="btn btn-outline-secondary">
-                    <i class="bi bi-gear me-2"></i>Settings & Profile
-                </a>
-            </div>
-        </div>
-        </div>
-    </div>
-</div>
+    const labels = <?php echo json_encode($chart_labels); ?>;
+    const values = <?php echo json_encode($chart_counts); ?>;
+
+    new Chart(canvas, {
+        type: 'line',
+        data: {
+            labels,
+            datasets: [{
+                label: 'Follow-ups Due',
+                data: values,
+                borderColor: '#1bff1b',
+                backgroundColor: 'rgba(27, 255, 27, 0.15)',
+                borderWidth: 2,
+                pointRadius: 3,
+                pointHoverRadius: 5,
+                tension: 0.35,
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false },
+                tooltip: {
+                    backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                    borderColor: '#1bff1b',
+                    borderWidth: 1,
+                    titleColor: '#b8ffb8',
+                    bodyColor: '#e2ffe2'
+                }
+            },
+            scales: {
+                x: {
+                    ticks: { color: '#8cff8c' },
+                    grid: { color: 'rgba(20, 127, 2, 0.2)' }
+                },
+                y: {
+                    beginAtZero: true,
+                    ticks: { color: '#8cff8c', precision: 0 },
+                    grid: { color: 'rgba(20, 127, 2, 0.2)' }
+                }
+            }
+        }
+    });
+})();
+</script>
 
 <?php include '../includes/footer.php'; ?>
