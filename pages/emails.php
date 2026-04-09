@@ -39,28 +39,28 @@ include '../includes/header.php';
     }
 
     .emails-dark .table thead th {
-        background-color: rgba(20, 127, 2, 0.12) !important;
-        color: #8cff8c;
-        border-bottom-color: rgba(20, 127, 2, 0.35);
+        background-color: rgba(25, 135, 84, 0.08) !important;
+        color: #1f5134;
+        border-bottom-color: rgba(25, 135, 84, 0.16);
     }
 
     .emails-dark .table tbody tr {
-        background-color: rgba(0, 0, 0, 0.45) !important;
+        background-color: #ffffff !important;
     }
 
     .emails-dark .table tbody tr.table-danger,
     .emails-dark .table tbody tr.table-warning {
-        background-color: rgba(0, 0, 0, 0.5) !important;
+        background-color: #fdfdfd !important;
     }
 
     .emails-dark .table tbody tr:hover {
-        background-color: rgba(20, 127, 2, 0.12) !important;
+        background-color: rgba(25, 135, 84, 0.06) !important;
     }
 
     .emails-dark .table tbody td,
     .emails-dark .table tbody td .fw-semibold,
     .emails-dark .table tbody td strong {
-        color: #8cff8c;
+        color: #173224;
     }
 
     .mt-modal {
@@ -77,7 +77,7 @@ include '../includes/header.php';
     .mt-modal__backdrop {
         position: fixed;
         inset: 0;
-        background: rgba(0, 0, 0, 0.7);
+        background: rgba(23, 50, 36, 0.35);
     }
 
     .mt-modal__dialog {
@@ -88,25 +88,25 @@ include '../includes/header.php';
         width: min(520px, 92vw);
         max-height: 90vh;
         overflow: auto;
-        background: #020602;
-        color: #8cff8c;
-        border: 1px solid rgba(20, 127, 2, 0.5);
+        background: #ffffff;
+        color: #173224;
+        border: 1px solid rgba(25, 135, 84, 0.16);
         border-radius: 14px;
-        box-shadow: 0 18px 36px rgba(20, 127, 2, 0.25);
+        box-shadow: none;
         z-index: 1;
     }
 
     .mt-modal__header,
     .mt-modal__footer {
         padding: 0.85rem 1.25rem;
-        border-bottom: 1px solid rgba(20, 127, 2, 0.35);
+        border-bottom: 1px solid rgba(25, 135, 84, 0.12);
         display: flex;
         align-items: center;
         justify-content: space-between;
     }
 
     .mt-modal__footer {
-        border-top: 1px solid rgba(20, 127, 2, 0.35);
+        border-top: 1px solid rgba(25, 135, 84, 0.12);
         border-bottom: none;
         justify-content: flex-end;
         gap: 0.6rem;
@@ -120,13 +120,13 @@ include '../includes/header.php';
     .mt-modal .form-label,
     .mt-modal .input-group-text,
     .mt-modal .form-control {
-        color: #8cff8c;
+        color: #173224;
     }
 
     .mt-modal__close {
-        background: transparent;
-        border: 1px solid rgba(20, 127, 2, 0.4);
-        color: #8cff8c;
+        background: #ffffff;
+        border: 1px solid rgba(25, 135, 84, 0.16);
+        color: #198754;
         border-radius: 10px;
         width: 34px;
         height: 34px;

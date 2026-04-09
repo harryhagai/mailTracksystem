@@ -74,20 +74,20 @@ include '../includes/header.php';
     .dashboard-section-gray {
         background-color: transparent;
         padding: 2rem;
-        border-radius: 0.5rem;
+        border-radius: 1rem;
         margin-bottom: 2rem;
     }
 
     .hacker-card {
-        background: linear-gradient(135deg, rgba(3, 8, 4, 0.98), rgba(6, 20, 8, 0.98));
-        border: 1px solid rgba(20, 127, 2, 0.4);
-        box-shadow: 0 0 24px rgba(20, 127, 2, 0.25);
+        background: transparent;
+        border: 1px solid rgba(25, 135, 84, 0.18);
+        box-shadow: none;
     }
 
     .hacker-card .card-header {
         background: transparent;
-        color: #64ff64;
-        border-bottom: 1px solid rgba(20, 127, 2, 0.35);
+        color: #198754;
+        border-bottom: 1px solid rgba(25, 135, 84, 0.16);
     }
 
     .hacker-chart-wrap {
@@ -109,18 +109,16 @@ include '../includes/header.php';
     }
 
     .hacker-chart-glow {
-        background: radial-gradient(circle at 20% 20%, rgba(20, 127, 2, 0.2), transparent 60%),
-                    radial-gradient(circle at 80% 10%, rgba(20, 255, 20, 0.12), transparent 55%);
-        mix-blend-mode: screen;
+        background: radial-gradient(circle at 20% 20%, rgba(25, 135, 84, 0.14), transparent 60%),
+                    radial-gradient(circle at 80% 10%, rgba(25, 135, 84, 0.08), transparent 55%);
     }
 
     .hacker-chart-grid {
         background-image:
-            linear-gradient(rgba(20, 127, 2, 0.12) 1px, transparent 1px),
-            linear-gradient(90deg, rgba(20, 127, 2, 0.12) 1px, transparent 1px);
+            linear-gradient(rgba(25, 135, 84, 0.1) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(25, 135, 84, 0.1) 1px, transparent 1px);
         background-size: 24px 24px;
-        opacity: 0.6;
-        mix-blend-mode: screen;
+        opacity: 0.65;
         animation: hackerGridMove 12s linear infinite;
     }
 
@@ -153,8 +151,8 @@ include '../includes/header.php';
 
     .due-today-header {
         background: transparent;
-        color: #147f02;
-        border: 1px solid #147f02;
+        color: #198754;
+        border: none;
     }
 </style>
 
@@ -289,10 +287,10 @@ include '../includes/header.php';
             datasets: [{
                 label: 'Follow-ups Due',
                 data: values,
-                borderColor: '#1bff1b',
-                backgroundColor: 'rgba(27, 255, 27, 0.15)',
-                borderWidth: 2,
-                pointRadius: 3,
+                borderColor: '#198754',
+                backgroundColor: 'rgba(25, 135, 84, 0.14)',
+                borderWidth: 3,
+                pointRadius: 4,
                 pointHoverRadius: 5,
                 tension: 0.35,
                 fill: true
@@ -304,22 +302,22 @@ include '../includes/header.php';
             plugins: {
                 legend: { display: false },
                 tooltip: {
-                    backgroundColor: 'rgba(0, 0, 0, 0.9)',
-                    borderColor: '#1bff1b',
+                    backgroundColor: 'rgba(255, 255, 255, 0.96)',
+                    borderColor: '#198754',
                     borderWidth: 1,
-                    titleColor: '#b8ffb8',
-                    bodyColor: '#e2ffe2'
+                    titleColor: '#173224',
+                    bodyColor: '#198754'
                 }
             },
             scales: {
                 x: {
-                    ticks: { color: '#8cff8c' },
-                    grid: { color: 'rgba(20, 127, 2, 0.2)' }
+                    ticks: { color: '#1f5134' },
+                    grid: { color: 'rgba(25, 135, 84, 0.12)' }
                 },
                 y: {
                     beginAtZero: true,
-                    ticks: { color: '#8cff8c', precision: 0 },
-                    grid: { color: 'rgba(20, 127, 2, 0.2)' }
+                    ticks: { color: '#1f5134', precision: 0 },
+                    grid: { color: 'rgba(25, 135, 84, 0.12)' }
                 }
             }
         }

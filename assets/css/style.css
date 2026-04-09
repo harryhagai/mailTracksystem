@@ -1,21 +1,21 @@
 /* MailTrack System - Vue Pro inspired Bootstrap theme */
 
 :root {
-    --app-font: "Courier New", Courier, "Lucida Console", "DejaVu Sans Mono", "Bitstream Vera Sans Mono", monospace;
-    --app-primary: #147f02;
-    --app-success: #147f02;
-    --app-blue: #147f02;
-    --app-secondary: #147f02;
-    --app-white: #000000;
-    --app-primary-rgb: 31, 75, 214;
-    --app-secondary-rgb: 107, 114, 128;
-    --app-text: var(--app-secondary);
-    --app-muted: rgba(var(--app-secondary-rgb), 0.75);
+    --app-font: "Sora", "Segoe UI", sans-serif;
+    --app-primary: #198754;
+    --app-success: #198754;
+    --app-blue: #198754;
+    --app-secondary: #1f5134;
+    --app-white: #ffffff;
+    --app-primary-rgb: 25, 135, 84;
+    --app-secondary-rgb: 31, 81, 52;
+    --app-text: #173224;
+    --app-muted: rgba(23, 50, 36, 0.65);
     --app-surface: var(--app-white);
-    --app-surface-alt: rgba(var(--app-secondary-rgb), 0.06);
-    --app-border: rgba(var(--app-secondary-rgb), 0.2);
-    --app-shadow: 0 18px 36px rgba(var(--app-secondary-rgb), 0.18);
-    --app-shadow-soft: 0 8px 16px rgba(var(--app-secondary-rgb), 0.12);
+    --app-surface-alt: #f3fbf6;
+    --app-border: rgba(var(--app-primary-rgb), 0.18);
+    --app-shadow: 0 20px 45px rgba(var(--app-primary-rgb), 0.12);
+    --app-shadow-soft: 0 10px 22px rgba(var(--app-primary-rgb), 0.08);
     --app-radius-lg: 20px;
     --app-radius-md: 14px;
     --app-radius-sm: 10px;
@@ -119,16 +119,16 @@ a:hover {
     display: flex;
     align-items: center;
     gap: 0.5rem;
-    background: rgba(20, 127, 2, 0.08);
+    background: rgba(var(--app-primary-rgb), 0.08);
     border-radius: 999px;
     padding: 0.35rem 0.85rem;
     min-width: 260px;
-    border: 1px solid rgba(20, 127, 2, 0.6);
+    border: 1px solid rgba(var(--app-primary-rgb), 0.28);
     transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 
 .topbar-search i {
-    color: #8cff8c;
+    color: var(--app-primary);
 }
 
 .topbar-search .form-control {
@@ -138,17 +138,17 @@ a:hover {
     height: auto;
     font-size: 0.9rem;
     box-shadow: none;
-    color: #8cff8c;
-    caret-color: #1bff1b;
+    color: var(--app-text);
+    caret-color: var(--app-primary);
 }
 
 .topbar-search .form-control::placeholder {
-    color: rgba(140, 255, 140, 0.6);
+    color: rgba(var(--app-secondary-rgb), 0.45);
 }
 
 .topbar-search:focus-within {
-    border-color: #147f02;
-    box-shadow: 0 0 0 1px rgba(20, 127, 2, 0.6);
+    border-color: var(--app-primary);
+    box-shadow: 0 0 0 4px rgba(var(--app-primary-rgb), 0.12);
 }
 
 .topbar-actions {
@@ -200,7 +200,7 @@ a:hover {
     flex-direction: column;
     gap: 1.5rem;
     border-right: 1px solid var(--app-border);
-    box-shadow: 4px 0 16px rgba(var(--app-secondary-rgb), 0.06);
+    box-shadow: none;
     z-index: 1040;
 }
 
@@ -257,14 +257,14 @@ a:hover {
 }
 
 .sidebar-nav .nav-link:hover {
-    color: var(--app-secondary);
-    background: transparent;
+    color: var(--app-primary);
+    background: rgba(var(--app-primary-rgb), 0.08);
 }
 
 .sidebar-nav .nav-link.active {
-    color: #147f02;
-    background: transparent;
-    box-shadow: inset 0 0 0 1px rgba(20, 127, 2, 0.6);
+    color: var(--app-primary);
+    background: rgba(var(--app-primary-rgb), 0.08);
+    box-shadow: inset 0 0 0 1px rgba(var(--app-primary-rgb), 0.18);
 }
 
 .nav-icon {
@@ -293,7 +293,7 @@ a:hover {
     height: 36px;
     border-radius: 50%;
     background: var(--app-primary);
-    color: var(--app-white);
+    color: #ffffff;
     font-weight: 600;
     display: inline-flex;
     align-items: center;
@@ -344,21 +344,21 @@ a:hover {
 }
 
 .btn-outline-success:hover {
-    background-color: #000000;
-    border-color: #000000;
-    color: var(--app-success);
+    background-color: var(--app-success);
+    border-color: var(--app-success);
+    color: #ffffff;
 }
 
 .btn-secondary {
     background-color: var(--app-secondary);
     border-color: var(--app-secondary);
-    color: var(--app-white);
+    color: #ffffff;
 }
 
 .btn-secondary:hover {
     background-color: rgba(var(--app-secondary-rgb), 0.9);
     border-color: rgba(var(--app-secondary-rgb), 0.9);
-    color: var(--app-white);
+    color: #ffffff;
 }
 
 .btn-outline-secondary {
@@ -369,7 +369,7 @@ a:hover {
 .btn-outline-secondary:hover {
     background-color: var(--app-secondary);
     border-color: var(--app-secondary);
-    color: var(--app-white);
+    color: #ffffff;
 }
 
 .btn-icon {
@@ -384,12 +384,15 @@ a:hover {
 
 .btn-ghost {
     background: transparent;
-    border: 1px solid rgba(20, 127, 2, 0.6);
-    color: #8cff8c;
+    border: 1px solid rgba(var(--app-primary-rgb), 0.18);
+    color: var(--app-primary);
+    box-shadow: none;
 }
 
 .btn-ghost:hover {
-    background: transparent;
+    background: rgba(var(--app-primary-rgb), 0.08);
+    border-color: rgba(var(--app-primary-rgb), 0.26);
+    color: var(--app-primary);
 }
 
 .notification-badge {
@@ -400,34 +403,35 @@ a:hover {
     height: 20px;
     padding: 0 6px;
     border-radius: 999px;
-    background: #147f02;
-    color: #000000;
+    background: var(--app-primary);
+    color: #ffffff;
     font-size: 0.7rem;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border: 1px solid rgba(20, 127, 2, 0.6);
-    box-shadow: 0 0 8px rgba(20, 127, 2, 0.35);
+    border: 1px solid rgba(var(--app-primary-rgb), 0.3);
+    box-shadow: 0 8px 18px rgba(var(--app-primary-rgb), 0.22);
     pointer-events: none;
 }
 
 .notification-menu {
     min-width: 260px;
-    background: #020602;
-    color: #8cff8c;
-    border: 1px solid rgba(20, 127, 2, 0.5);
+    background: #ffffff;
+    color: var(--app-text);
+    border: 1px solid rgba(var(--app-primary-rgb), 0.16);
+    box-shadow: none;
 }
 
 .notification-menu .dropdown-item {
-    color: #8cff8c;
+    color: var(--app-text);
 }
 
 .notification-menu .dropdown-item:hover {
-    background: rgba(20, 127, 2, 0.12);
+    background: rgba(var(--app-primary-rgb), 0.08);
 }
 
 .notification-menu .dropdown-divider {
-    border-top-color: rgba(20, 127, 2, 0.3);
+    border-top-color: rgba(var(--app-primary-rgb), 0.14);
 }
 
 .btn-no-ripple {
@@ -449,13 +453,13 @@ a:hover {
     height: 1.1rem;
     border-radius: 50%;
     border: 2px solid rgba(255, 255, 255, 0.4);
-    border-top-color: #000000;
+    border-top-color: #ffffff;
     animation: spin 0.8s linear infinite;
 }
 
 /* Cards */
 .card {
-    border: none;
+    border: 1px solid var(--app-border);
     border-radius: var(--app-radius-md);
     box-shadow: none;
     background-color: transparent;
@@ -471,26 +475,26 @@ a:hover {
 
 /* Dashboard tiles with green borders */
 .dashboard-section-gray .card {
-    border: 2px solid #28a745 !important;
+    border: 1px solid rgba(var(--app-primary-rgb), 0.18) !important;
     border-radius: var(--app-radius-md);
     background-color: var(--app-white);
 }
 
 .dashboard-section-gray .card-header {
-    border-bottom: 2px solid #28a745 !important;
+    border-bottom: 1px solid rgba(var(--app-primary-rgb), 0.18) !important;
 }
 
 .dashboard-section-gray .table {
-    border: 2px solid #28a745 !important;
+    border: 1px solid rgba(var(--app-primary-rgb), 0.18) !important;
     border-top: none !important;
 }
 
 .dashboard-section-gray .table thead th {
-    border-bottom: 2px solid #28a745 !important;
+    border-bottom: 1px solid rgba(var(--app-primary-rgb), 0.18) !important;
 }
 
 .dashboard-section-gray .table tbody td {
-    border-bottom: 1px solid rgba(40, 167, 69, 0.2) !important;
+    border-bottom: 1px solid rgba(var(--app-primary-rgb), 0.1) !important;
 }
 
 /* Green text for dashboard tiles */
@@ -500,7 +504,7 @@ a:hover {
 .dashboard-section-gray .card-header h5,
 .dashboard-section-gray .table th,
 .dashboard-section-gray .table td {
-    color: #28a745 !important;
+    color: var(--app-secondary) !important;
 }
 
 /* Red delete button */
@@ -539,6 +543,7 @@ a:hover {
     background-color: transparent;
     border: none;
     border-bottom: 2px solid var(--app-border);
+    color: var(--app-primary);
 }
 
 .input-group-text:focus {
@@ -644,6 +649,44 @@ body.app--auth .input-group:focus-within .input-group-text {
     border-color: rgba(var(--app-primary-rgb), 0.2);
     background: rgba(var(--app-primary-rgb), 0.08);
     color: var(--app-primary);
+}
+
+.dropdown-menu {
+    border: 1px solid var(--app-border);
+    border-radius: var(--app-radius-sm);
+    box-shadow: none;
+}
+
+.auth-main {
+    position: relative;
+}
+
+.auth-container {
+    position: relative;
+    z-index: 2;
+}
+
+.auth-card {
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    overflow: hidden;
+}
+
+.auth-card .card-header {
+    background: transparent;
+    padding-top: 2rem !important;
+    padding-bottom: 1rem !important;
+}
+
+.text-green {
+    color: var(--app-primary) !important;
+}
+
+.login-footer {
+    position: relative;
+    z-index: 2;
 }
 
 /* Breadcrumb */
