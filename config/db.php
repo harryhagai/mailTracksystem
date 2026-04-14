@@ -1,7 +1,7 @@
 <?php
 
 $host = "localhost";
-$db = "mailtrack";
+$db = "mailtrack_db";
 $user = "root";
 $pass = "";
 
