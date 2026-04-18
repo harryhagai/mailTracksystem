@@ -58,7 +58,7 @@ include '../includes/header.php';
     }
 
     .emails-dark .table tbody td,
-    .emails-dark .table tbody td .fw-semibold,
+    .emails-dark .table tbody td ,
     .emails-dark .table tbody td strong {
         color: #173224;
     }
@@ -225,7 +225,7 @@ include '../includes/header.php';
                                             <i class="bi bi-envelope fs-5"></i>
                                         </div>
                                         <div>
-                                            <div class="fw-semibold"><?php echo htmlspecialchars($email['email']); ?></div>
+                                            <div><?php echo htmlspecialchars($email['email']); ?></div>
                                         </div>
                                     </div>
                                 </td>
@@ -240,7 +240,7 @@ include '../includes/header.php';
                                     </span>
                                 </td>
                                 <td>
-                                    <span class="<?php echo $is_overdue ? 'text-danger fw-semibold' : 'text-success'; ?>">
+                                    <span class="<?php echo $is_overdue ? 'text-danger' : 'text-success'; ?>">
                                         <?php echo $is_overdue ? abs($days_diff).' days late' : ($days_diff > 0 ? round($days_diff).' days' : 'Today'); ?>
                                     </span>
                                 </td>

@@ -5,29 +5,7 @@ $base_url = '../';
 include '../includes/header.php';
 ?>
 
-<!-- Code Snowfall Animation -->
-<div class="code-snow">
-    <span>function()</span>
-    <span>var x = 5;</span>
-    <span>console.log()</span>
-    <span>if (true) {}</span>
-    <span>return value;</span>
-    <span>for (i=0; i<10; i++)</span>
-    <span>while (condition)</span>
-    <span>document.getElementById()</span>
-    <span>addEventListener()</span>
-    <span>JSON.parse()</span>
-    <span>JSON.stringify()</span>
-    <span>setTimeout()</span>
-    <span>setInterval()</span>
-    <span>fetch().then()</span>
-    <span>async function()</span>
-    <span>await promise</span>
-    <span>try { } catch(e) { }</span>
-    <span>localStorage.setItem()</span>
-    <span>sessionStorage.getItem()</span>
-    <span>Array.push()</span>
-</div>
+
 
 <!-- Particles Canvas (moved here for particles.js) -->
 <canvas id="particles-js"></canvas>
@@ -94,7 +72,7 @@ include '../includes/header.php';
 
                     <div class="text-center mt-1">
                         <p class="mb-1 text-muted small">Don't have an account?</p>
-                        <a href="register.php" class="text-success fw-semibold text-decoration-none">
+                        <a href="register.php" class="text-success text-decoration-none">
                             <i class="bi bi-person-plus me-1"></i>Create Account
                         </a>
                     </div>

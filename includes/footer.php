@@ -8,7 +8,7 @@
                     <div class="container-fluid">
                         <div class="footer-content">
                             <div class="footer-left">
-                                <span class="fw-semibold">MailTrack</span>
+                                <span>MailTrack</span>
                                 <span class="text-muted">Email follow-up made simple</span>
                             </div>
                             <div class="footer-right">

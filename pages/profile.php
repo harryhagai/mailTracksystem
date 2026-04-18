@@ -97,16 +97,14 @@ include '../includes/header.php';
                         <div class="col-md-4">
                             <label class="form-label">New Password</label>
                             <div class="input-group">
-                                <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
-                                <input type="password" name="new_password" class="form-control" required minlength="8">
+                                <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>\n                                <input type="password" name="new_password" class="form-control" required minlength="8" id="newPassword">
                             </div>
                             <div class="form-text">Minimum 8 characters</div>
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">Confirm Password</label>
                             <div class="input-group">
-                                <span class="input-group-text"><i class="bi bi-lock-check"></i></span>
-                                <input type="password" name="confirm_password" class="form-control" required>
+                                <span class="input-group-text"><i class="bi bi-lock-check"></i></span>\n                                <input type="password" name="confirm_password" class="form-control" required id="confirmPassword">
                             </div>
                         </div>
                     </div>
@@ -138,7 +136,7 @@ include '../includes/header.php';
                             </div>
                             <div class="col">
                                 <small class="text-muted">Primary Email</small>
-                                <div class="fw-semibold"><?php echo htmlspecialchars($_SESSION['email']); ?></div>
+                                <div><?php echo htmlspecialchars($_SESSION['email']); ?></div>
                             </div>
                         </div>
                     </div>
@@ -149,7 +147,7 @@ include '../includes/header.php';
                             </div>
                             <div class="col">
                                 <small class="text-muted">Member Since</small>
-                                <div class="fw-semibold"><?php echo $user['created_at'] ? date('M d, Y', strtotime($user['created_at'])) : 'N/A'; ?></div>
+                                <div><?php echo $user['created_at'] ? date('M d, Y', strtotime($user['created_at'])) : 'N/A'; ?></div>
                             </div>
                         </div>
                     </div>
@@ -168,4 +166,6 @@ include '../includes/header.php';
 function exportData() {
     alert('Export functionality coming soon!');
 }
+</script>
+    }
 </script>

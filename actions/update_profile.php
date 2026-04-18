@@ -1,9 +1,9 @@
 <?php
 session_start();
-require '../config/db.php';
+require __DIR__ . '/../config/db.php';
 
 if (!isset($_SESSION['user_id'])) {
-    header("Location: ../auth/login.php");
+    header("Location: " . __DIR__ . "/../auth/login.php");
     exit();
 }
 
@@ -18,19 +18,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         
         if (empty($current_password) || empty($new_password) || empty($confirm_password)) {
             $_SESSION['error'] = 'Please fill in all fields';
-            header("Location: ../pages/profile.php");
+            header("Location: " . __DIR__ . "/../pages/profile.php");
             exit();
         }
         
         if ($new_password !== $confirm_password) {
             $_SESSION['error'] = 'New passwords do not match';
-            header("Location: ../pages/profile.php");
+            header("Location: " . __DIR__ . "/../pages/profile.php");
             exit();
         }
         
-        if (strlen($new_password) < 6) {
-            $_SESSION['error'] = 'Password must be at least 6 characters';
-            header("Location: ../pages/profile.php");
+        if (strlen($new_password) < 8) {
+            $_SESSION['error'] = 'Password must be at least 8 characters';
+            header("Location: " . __DIR__ . "/../pages/profile.php");
             exit();
         }
         
@@ -42,7 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             
             if (!$user || !password_verify($current_password, $user['password'])) {
                 $_SESSION['error'] = 'Current password is incorrect';
-                header("Location: ../pages/profile.php");
+                header("Location: " . __DIR__ . "/../pages/profile.php");
                 exit();
             }
             
@@ -52,20 +52,20 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->execute([$hashed_password, $user_id]);
             
             $_SESSION['success'] = 'Password updated successfully!';
-            header("Location: ../pages/profile.php");
+            header("Location: " . __DIR__ . "/../pages/profile.php");
             exit();
             
         } catch(PDOException $e) {
             $_SESSION['error'] = 'Failed to update password: ' . $e->getMessage();
-            header("Location: ../pages/profile.php");
+            header("Location: " . __DIR__ . "/../pages/profile.php");
             exit();
         }
     } else {
-        header("Location: ../pages/profile.php");
+        header("Location: " . __DIR__ . "/../pages/profile.php");
         exit();
     }
 } else {
-    header("Location: ../pages/profile.php");
+    header("Location: " . __DIR__ . "/../pages/profile.php");
     exit();
 }
 ?>

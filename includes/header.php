@@ -75,7 +75,7 @@ if (isset($_SESSION['user_id']) && isset($pdo)) {
                                     <?php if ($due_total > 0): ?>
                                         <?php foreach ($due_notifications as $item): ?>
                                             <a class="dropdown-item" href="../pages/emails.php?edit=<?php echo $item['id']; ?>">
-                                                <div class="fw-semibold"><?php echo htmlspecialchars($item['email']); ?></div>
+                                                <div><?php echo htmlspecialchars($item['email']); ?></div>
                                                 <div class="small text-muted">Due <?php echo date('M j', strtotime($item['due_date'])); ?></div>
                                             </a>
                                         <?php endforeach; ?>
@@ -100,7 +100,7 @@ if (isset($_SESSION['user_id']) && isset($pdo)) {
                                 <ul class="dropdown-menu dropdown-menu-end shadow">
                                     <?php if(isset($_SESSION['user_id'])): ?>
                                         <li class="dropdown-header">
-                                            <div class="fw-semibold">Signed in</div>
+                                            <div>Signed in</div>
                                             <div class="small text-muted"><?php echo htmlspecialchars($_SESSION['email'] ?? ''); ?></div>
                                         </li>
                                         <li><hr class="dropdown-divider"></li>
