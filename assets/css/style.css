@@ -550,6 +550,31 @@ a:hover {
     border-bottom-color: var(--app-primary);
 }
 
+.password-toggle {
+    border: none;
+    border-bottom: 2px solid var(--app-border);
+    border-radius: 0;
+    color: var(--app-primary);
+    padding: 0.55rem 0.25rem 0.55rem 0.75rem;
+    background: transparent;
+    cursor: pointer;
+    flex: 0 0 auto;
+    position: relative;
+    z-index: 2;
+}
+
+.password-toggle i {
+    pointer-events: none;
+}
+
+.password-toggle:hover,
+.password-toggle:focus {
+    color: rgba(var(--app-primary-rgb), 0.85);
+    background: transparent;
+    border-bottom-color: var(--app-primary);
+    box-shadow: none;
+}
+
 /* App input-groups: single underline across icon + input */
 body.app--app .input-group {
     align-items: center;
@@ -562,7 +587,8 @@ body.app--app .input-group:focus-within {
 
 body.app--app .input-group .form-control,
 body.app--app .input-group .form-select,
-body.app--app .input-group .input-group-text {
+body.app--app .input-group .input-group-text,
+body.app--app .input-group .password-toggle {
     border-bottom: none !important;
 }
 
@@ -589,6 +615,21 @@ body.app--auth .input-group-text {
     font-size: 1.1rem;
     display: flex;
     align-items: center;
+}
+
+body.app--auth .password-toggle {
+    border: none !important;
+    background: transparent !important;
+    color: var(--app-success);
+    padding: 0.75rem 1.25rem 0.75rem 0.25rem;
+    display: flex;
+    align-items: center;
+}
+
+body.app--auth .password-toggle:hover,
+body.app--auth .password-toggle:focus {
+    color: rgba(var(--app-primary-rgb), 0.85);
+    box-shadow: none;
 }
 
 body.app--auth .form-control,

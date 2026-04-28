@@ -1,5 +1,5 @@
-<?php session_start(); ?>
 <?php
+require_once '../includes/security.php';
 $page_title = 'Login';
 $base_url = '../';
 include '../includes/header.php';
@@ -26,7 +26,7 @@ include '../includes/header.php';
                     <?php if (isset($_SESSION['error'])): ?>
                         <div class="alert alert-danger fade-in">
                             <i class="bi bi-exclamation-triangle-fill me-2"></i>
-                            <?php echo $_SESSION['error'];
+                            <?php echo e($_SESSION['error']);
                             unset($_SESSION['error']); ?>
                         </div>
                     <?php endif; ?>
@@ -34,12 +34,13 @@ include '../includes/header.php';
                     <?php if (isset($_SESSION['success'])): ?>
                         <div class="alert alert-success fade-in">
                             <i class="bi bi-check-circle-fill me-2"></i>
-                            <?php echo $_SESSION['success'];
+                            <?php echo e($_SESSION['success']);
                             unset($_SESSION['success']); ?>
                         </div>
                     <?php endif; ?>
 
                     <form action="../actions/login.php" method="POST" id="loginForm" class="needs-validation" novalidate>
+                        <?php echo csrf_field(); ?>
                         <div class="mb-1">
                             <label class="form-label">Email Address</label>
                             <div class="input-group">
@@ -59,6 +60,9 @@ include '../includes/header.php';
                                 </span>
                                 <input type="password" name="password" class="form-control"
                                     placeholder="Enter your password" required minlength="6">
+                                <button class="btn password-toggle" type="button" aria-label="Show password" data-password-toggle>
+                                    <i class="bi bi-eye"></i>
+                                </button>
                             </div>
                         </div>
 
@@ -82,10 +86,5 @@ include '../includes/header.php';
     </div>
 </div>
 
-<!-- Compact footer for login page -->
-<footer class="login-footer text-center py-2 text-muted small">
-    <div class="container">
-        <p class="mb-1">© <?php echo date('Y'); ?> MailTrack. All rights reserved. | Developed by HAGAI HAROLD NGOBEY</p>
-        <p class="mb-0">Professional Email Tracking System</p>
-    </div>
-</footer>
+<script src="../assets/js/particles.js"></script>
+<?php include '../includes/footer.php'; ?>

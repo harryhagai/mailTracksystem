@@ -1,11 +1,6 @@
 <?php
-session_start();
 require '../config/db.php';
-
-if (!isset($_SESSION['user_id'])) {
-    header("Location: ../auth/login.php");
-    exit();
-}
+require_login();
 
 // Get all emails for the current user
 try {
@@ -14,9 +9,10 @@ try {
     $emails = $stmt->fetchAll();
 
     $edit_email = null;
-    if (isset($_GET['edit'])) {
+    $edit_id = filter_input(INPUT_GET, 'edit', FILTER_VALIDATE_INT);
+    if ($edit_id) {
         $stmt = $pdo->prepare("SELECT * FROM emails WHERE id = ? AND user_id = ?");
-        $stmt->execute([$_GET['edit'], $_SESSION['user_id']]);
+        $stmt->execute([$edit_id, $_SESSION['user_id']]);
         $edit_email = $stmt->fetch();
     }
 } catch(PDOException $e) {
@@ -175,7 +171,7 @@ include '../includes/header.php';
 <?php if(isset($_SESSION['success'])): ?>
     <div class="alert alert-success alert-dismissible fade show" role="alert">
         <i class="bi bi-check-circle-fill me-2"></i>
-        <?php echo $_SESSION['success']; unset($_SESSION['success']); ?>
+        <?php echo e($_SESSION['success']); unset($_SESSION['success']); ?>
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 <?php endif; ?>
@@ -183,7 +179,7 @@ include '../includes/header.php';
 <?php if(isset($_SESSION['error'])): ?>
     <div class="alert alert-danger alert-dismissible fade show" role="alert">
         <i class="bi bi-exclamation-triangle-fill me-2"></i>
-        <?php echo $_SESSION['error']; unset($_SESSION['error']); ?>
+        <?php echo e($_SESSION['error']); unset($_SESSION['error']); ?>
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 <?php endif; ?>
@@ -225,7 +221,7 @@ include '../includes/header.php';
                                             <i class="bi bi-envelope fs-5"></i>
                                         </div>
                                         <div>
-                                            <div><?php echo htmlspecialchars($email['email']); ?></div>
+                                            <div><?php echo e($email['email']); ?></div>
                                         </div>
                                     </div>
                                 </td>
@@ -250,17 +246,21 @@ include '../includes/header.php';
                                                 class="btn btn-sm btn-outline-success"
                                                 title="Update"
                                                 data-modal-target="#editEmailModal"
-                                                data-id="<?php echo $email['id']; ?>"
-                                                data-email="<?php echo htmlspecialchars($email['email'], ENT_QUOTES); ?>"
-                                                data-date="<?php echo $email['due_date']; ?>">
+                                                data-id="<?php echo e($email['id']); ?>"
+                                                data-email="<?php echo e($email['email']); ?>"
+                                                data-date="<?php echo e($email['due_date']); ?>">
                                             <i class="bi bi-pencil"></i>
                                         </button>
-                                        <a href="../actions/delete_email.php?id=<?php echo $email['id']; ?>" 
-                                           class="btn btn-sm btn-outline-danger" 
-                                           title="Delete"
-                                           onclick="return confirm('Delete this follow-up?')">
-                                            <i class="bi bi-trash"></i>
-                                        </a>
+                                        <form action="../actions/delete_email.php" method="POST" class="d-inline">
+                                            <?php echo csrf_field(); ?>
+                                            <input type="hidden" name="id" value="<?php echo e($email['id']); ?>">
+                                            <button type="submit"
+                                                    class="btn btn-sm btn-outline-danger"
+                                                    title="Delete"
+                                                    onclick="return confirm('Delete this follow-up?')">
+                                                <i class="bi bi-trash"></i>
+                                            </button>
+                                        </form>
                                     </div>
                                 </td>
                             </tr>
@@ -291,6 +291,7 @@ include '../includes/header.php';
             </button>
         </div>
         <form action="../actions/add_email.php" method="POST" class="needs-validation" novalidate>
+            <?php echo csrf_field(); ?>
             <div class="mt-modal__body">
                 <div class="mb-3">
                     <label class="form-label">Email Address</label>
@@ -328,6 +329,7 @@ include '../includes/header.php';
             </button>
         </div>
         <form action="../actions/update_email.php" method="POST" class="needs-validation" novalidate>
+            <?php echo csrf_field(); ?>
             <input type="hidden" name="id" id="edit-email-id">
             <div class="mt-modal__body">
                 <div class="mb-3">

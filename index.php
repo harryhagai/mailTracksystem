@@ -1,10 +1,8 @@
 <?php
-session_start();
+require_once 'includes/security.php';
 if (isset($_SESSION['user_id'])) {
-    header("Location: pages/dashboard.php");
-    exit();
+    redirect_to("pages/dashboard.php");
 } else {
-    header("Location: auth/login.php");
-    exit();
+    redirect_to("auth/login.php");
 }
 ?>

@@ -22,7 +22,7 @@ if (isset($_SESSION['user_id']) && isset($pdo)) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title><?php echo isset($page_title) ? htmlspecialchars($page_title) : 'MailTrack System'; ?> - MailTrack</title>
+    <title><?php echo isset($page_title) ? e($page_title) : 'MailTrack System'; ?> - MailTrack</title>
     
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -49,7 +49,7 @@ if (isset($_SESSION['user_id']) && isset($pdo)) {
                         </button>
                         <div class="topbar-title">
                             <div class="topbar-title-text">
-                                <?php echo isset($page_title) ? htmlspecialchars($page_title) : 'Dashboard'; ?>
+                                <?php echo isset($page_title) ? e($page_title) : 'Dashboard'; ?>
                             </div>
                             <div class="topbar-subtitle">MailTrack System</div>
                         </div>
@@ -74,9 +74,9 @@ if (isset($_SESSION['user_id']) && isset($pdo)) {
                                     </div>
                                     <?php if ($due_total > 0): ?>
                                         <?php foreach ($due_notifications as $item): ?>
-                                            <a class="dropdown-item" href="../pages/emails.php?edit=<?php echo $item['id']; ?>">
-                                                <div><?php echo htmlspecialchars($item['email']); ?></div>
-                                                <div class="small text-muted">Due <?php echo date('M j', strtotime($item['due_date'])); ?></div>
+                                            <a class="dropdown-item" href="../pages/emails.php?edit=<?php echo e($item['id']); ?>">
+                                                <div><?php echo e($item['email']); ?></div>
+                                                <div class="small text-muted">Due <?php echo e(date('M j', strtotime($item['due_date']))); ?></div>
                                             </a>
                                         <?php endforeach; ?>
                                         <?php if ($due_total > count($due_notifications)): ?>
@@ -101,7 +101,7 @@ if (isset($_SESSION['user_id']) && isset($pdo)) {
                                     <?php if(isset($_SESSION['user_id'])): ?>
                                         <li class="dropdown-header">
                                             <div>Signed in</div>
-                                            <div class="small text-muted"><?php echo htmlspecialchars($_SESSION['email'] ?? ''); ?></div>
+                                            <div class="small text-muted"><?php echo e($_SESSION['email'] ?? ''); ?></div>
                                         </li>
                                         <li><hr class="dropdown-divider"></li>
                                         <li>
@@ -110,9 +110,12 @@ if (isset($_SESSION['user_id']) && isset($pdo)) {
                                             </a>
                                         </li>
                                         <li>
-                                            <a class="dropdown-item text-danger" href="../auth/logout.php">
-                                                <i class="bi bi-box-arrow-right me-2"></i>Logout
-                                            </a>
+                                            <form action="../auth/logout.php" method="POST">
+                                                <?php echo csrf_field(); ?>
+                                                <button class="dropdown-item text-danger" type="submit">
+                                                    <i class="bi bi-box-arrow-right me-2"></i>Logout
+                                                </button>
+                                            </form>
                                         </li>
                                     <?php else: ?>
                                         <li>

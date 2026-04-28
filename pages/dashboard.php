@@ -1,11 +1,6 @@
 <?php
-session_start();
 require '../config/db.php';
-
-if (!isset($_SESSION['user_id'])) {
-    header("Location: ../auth/login.php");
-    exit();
-}
+require_login();
 
 // Prep chart labels for next 7 days
 $chart_labels = [];
@@ -243,7 +238,7 @@ include '../includes/header.php';
                             <?php foreach($due_today_limited as $email): ?>
                             <tr>
                                 <td>
-                                    <strong><?php echo htmlspecialchars($email['email']); ?></strong>
+                                    <strong><?php echo e($email['email']); ?></strong>
                                 </td>
                                 <td class="text-end">
                                     <a href="emails.php?edit=<?php echo $email['id']; ?>" class="btn btn-sm btn-outline-success" title="Update">

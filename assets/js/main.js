@@ -1,5 +1,21 @@
 // MailTrack System - JavaScript
 
+document.addEventListener('click', function(e) {
+    const toggle = e.target.closest('[data-password-toggle]');
+    if (!toggle) return;
+
+    const group = toggle.closest('.input-group');
+    const input = group ? group.querySelector('input[type="password"], input[type="text"]') : null;
+    const icon = toggle.querySelector('i');
+    if (!input || !icon) return;
+
+    const isHidden = input.type === 'password';
+    input.type = isHidden ? 'text' : 'password';
+    icon.classList.toggle('bi-eye', !isHidden);
+    icon.classList.toggle('bi-eye-slash', isHidden);
+    toggle.setAttribute('aria-label', isHidden ? 'Hide password' : 'Show password');
+});
+
 document.addEventListener('DOMContentLoaded', function() {
     // Sidebar toggle (desktop collapse + mobile drawer)
     const body = document.body;
@@ -145,7 +161,7 @@ document.addEventListener('DOMContentLoaded', function() {
             location.reload();
         });
     }
-    
+
     // Due date change handler
     const dueDateInputs = document.querySelectorAll('input[name="due_date"]');
     dueDateInputs.forEach(function(input) {

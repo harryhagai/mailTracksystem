@@ -1,13 +1,14 @@
 <?php
-session_start();
 require '../config/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $email = trim($_POST['email']);
-    $password = $_POST['password'];
-    $confirm_password = $_POST['confirm_password'];
+    verify_csrf();
+
+    $email = validate_email_address($_POST['email'] ?? '');
+    $password = $_POST['password'] ?? '';
+    $confirm_password = $_POST['confirm_password'] ?? '';
     
-    if (empty($email) || empty($password) || empty($confirm_password)) {
+    if (!$email || empty($password) || empty($confirm_password)) {
         $_SESSION['error'] = 'Please fill in all fields';
         header("Location: ../auth/register.php");
         exit();
@@ -19,8 +20,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
     }
     
-    if (strlen($password) < 6) {
-        $_SESSION['error'] = 'Password must be at least 6 characters';
+    if (!password_is_strong($password)) {
+        $_SESSION['error'] = 'Password must be at least 8 characters and include letters and numbers';
         header("Location: ../auth/register.php");
         exit();
     }
@@ -48,7 +49,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
         
     } catch(PDOException $e) {
-        $_SESSION['error'] = 'Registration failed: ' . $e->getMessage();
+        error_log('Registration failed: ' . $e->getMessage());
+        $_SESSION['error'] = 'Registration failed. Please try again.';
         header("Location: ../auth/register.php");
         exit();
     }

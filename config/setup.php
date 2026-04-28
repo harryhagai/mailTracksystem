@@ -1,4 +1,8 @@
 <?php
+if (PHP_SAPI !== 'cli') {
+    http_response_code(403);
+    exit('Setup can only be run from the command line.');
+}
 
 $host = "localhost";
 $user = "root";
@@ -9,8 +13,8 @@ try {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     
     // Create database if not exists
-    $pdo->exec("CREATE DATABASE IF NOT EXISTS mailtrack");
-    $pdo->exec("USE mailtrack");
+    $pdo->exec("CREATE DATABASE IF NOT EXISTS mailtrack_db");
+    $pdo->exec("USE mailtrack_db");
     
     // Create users table
     $pdo->exec("CREATE TABLE IF NOT EXISTS users (

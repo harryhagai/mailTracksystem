@@ -1,15 +1,19 @@
 <?php
-session_start();
 require '../config/db.php';
 
-if (!isset($_SESSION['user_id'])) {
-    header("Location: ../auth/login.php");
-    exit();
-}
+require_login();
 
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    verify_csrf();
+
+    $id = filter_input(INPUT_POST, 'id', FILTER_VALIDATE_INT);
     $user_id = $_SESSION['user_id'];
+
+    if (!$id) {
+        $_SESSION['error'] = 'Invalid email record';
+        header("Location: ../pages/emails.php");
+        exit();
+    }
     
     try {
         $stmt = $pdo->prepare("DELETE FROM emails WHERE id = ? AND user_id = ?");
@@ -24,7 +28,8 @@ if (isset($_GET['id'])) {
         exit();
         
     } catch(PDOException $e) {
-        $_SESSION['error'] = 'Failed to delete email: ' . $e->getMessage();
+        error_log('Failed to delete email: ' . $e->getMessage());
+        $_SESSION['error'] = 'Failed to delete email. Please try again.';
         header("Location: ../pages/emails.php");
         exit();
     }

@@ -1,19 +1,17 @@
 <?php
-session_start();
 require '../config/db.php';
 
-if (!isset($_SESSION['user_id'])) {
-    header("Location: ../auth/login.php");
-    exit();
-}
+require_login();
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    $email = trim($_POST['email']);
-    $due_date = $_POST['due_date'];
+    verify_csrf();
+
+    $email = validate_email_address($_POST['email'] ?? '');
+    $due_date = validate_date_string($_POST['due_date'] ?? '');
     $user_id = $_SESSION['user_id'];
     
-    if (empty($email) || empty($due_date)) {
-        $_SESSION['error'] = 'Please fill in all fields';
+    if (!$email || !$due_date) {
+        $_SESSION['error'] = 'Please enter a valid email and date';
         header("Location: ../pages/emails.php");
         exit();
     }
@@ -27,7 +25,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         exit();
         
     } catch(PDOException $e) {
-        $_SESSION['error'] = 'Failed to add email: ' . $e->getMessage();
+        error_log('Failed to add email: ' . $e->getMessage());
+        $_SESSION['error'] = 'Failed to add email. Please try again.';
         header("Location: ../pages/emails.php");
         exit();
     }

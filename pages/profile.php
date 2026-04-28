@@ -1,11 +1,6 @@
 <?php
-session_start();
 require '../config/db.php';
-
-if (!isset($_SESSION['user_id'])) {
-    header("Location: ../auth/login.php");
-    exit();
-}
+require_login();
 
 // Get user info
 try {
@@ -42,14 +37,14 @@ include '../includes/header.php';
 <!-- Alerts -->
 <?php if(isset($_SESSION['success'])): ?>
     <div class="alert alert-success alert-dismissible fade show">
-        <i class="bi bi-check-circle me-2"></i><?php echo $_SESSION['success']; unset($_SESSION['success']); ?>
+        <i class="bi bi-check-circle me-2"></i><?php echo e($_SESSION['success']); unset($_SESSION['success']); ?>
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 <?php endif; ?>
 
 <?php if(isset($_SESSION['error'])): ?>
     <div class="alert alert-danger alert-dismissible fade show">
-        <i class="bi bi-exclamation-triangle me-2"></i><?php echo $_SESSION['error']; unset($_SESSION['error']); ?>
+        <i class="bi bi-exclamation-triangle me-2"></i><?php echo e($_SESSION['error']); unset($_SESSION['error']); ?>
         <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     </div>
 <?php endif; ?>
@@ -63,11 +58,11 @@ include '../includes/header.php';
                 <div class="row align-items-center">
                     <div class="col-auto">
                         <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center" style="width: 100px; height: 100px; font-size: 2rem;">
-                            <?php echo strtoupper(substr($_SESSION['email'], 0, 2)); ?>
+                            <?php echo e(strtoupper(substr($_SESSION['email'], 0, 2))); ?>
                         </div>
                     </div>
                     <div class="col">
-                        <h3 class="mb-1"><?php echo htmlspecialchars($_SESSION['email']); ?></h3>
+                        <h3 class="mb-1"><?php echo e($_SESSION['email']); ?></h3>
                         <p class="text-muted mb-0">Member since <?php echo $user['created_at'] ? date('M Y', strtotime($user['created_at'])) : 'N/A'; ?></p>
                     </div>
                 </div>
@@ -83,7 +78,8 @@ include '../includes/header.php';
                 </h5>
             </div>
             <div class="card-body">
-                <form action="actions/update_profile.php" method="POST" class="needs-validation" novalidate>
+                <form action="../actions/update_profile.php" method="POST" class="needs-validation" novalidate>
+                    <?php echo csrf_field(); ?>
                     <input type="hidden" name="action" value="change_password">
                     
                     <div class="row g-4">
@@ -92,19 +88,30 @@ include '../includes/header.php';
                             <div class="input-group">
                                 <span class="input-group-text"><i class="bi bi-lock"></i></span>
                                 <input type="password" name="current_password" class="form-control" required>
+                                <button class="btn password-toggle" type="button" aria-label="Show password" data-password-toggle>
+                                    <i class="bi bi-eye"></i>
+                                </button>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">New Password</label>
                             <div class="input-group">
-                                <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>\n                                <input type="password" name="new_password" class="form-control" required minlength="8" id="newPassword">
+                                <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                                <input type="password" name="new_password" class="form-control" required minlength="8" pattern="(?=.*[A-Za-z])(?=.*\d).{8,}" id="newPassword">
+                                <button class="btn password-toggle" type="button" aria-label="Show password" data-password-toggle>
+                                    <i class="bi bi-eye"></i>
+                                </button>
                             </div>
-                            <div class="form-text">Minimum 8 characters</div>
+                            <div class="form-text">Minimum 8 characters with letters and numbers</div>
                         </div>
                         <div class="col-md-4">
                             <label class="form-label">Confirm Password</label>
                             <div class="input-group">
-                                <span class="input-group-text"><i class="bi bi-lock-check"></i></span>\n                                <input type="password" name="confirm_password" class="form-control" required id="confirmPassword">
+                                <span class="input-group-text"><i class="bi bi-lock-check"></i></span>
+                                <input type="password" name="confirm_password" class="form-control" required id="confirmPassword">
+                                <button class="btn password-toggle" type="button" aria-label="Show password" data-password-toggle>
+                                    <i class="bi bi-eye"></i>
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -136,7 +143,7 @@ include '../includes/header.php';
                             </div>
                             <div class="col">
                                 <small class="text-muted">Primary Email</small>
-                                <div><?php echo htmlspecialchars($_SESSION['email']); ?></div>
+                                <div><?php echo e($_SESSION['email']); ?></div>
                             </div>
                         </div>
                     </div>
@@ -161,11 +168,3 @@ include '../includes/header.php';
 </div>
 
 <?php include '../includes/footer.php'; ?>
-
-<script>
-function exportData() {
-    alert('Export functionality coming soon!');
-}
-</script>
-    }
-</script>

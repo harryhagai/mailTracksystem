@@ -55,10 +55,13 @@
             <div class="sidebar-label">Account</div>
             <ul class="nav flex-column sidebar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="../auth/logout.php">
-                        <span class="nav-icon text-warning"><i class="bi bi-box-arrow-right"></i></span>
-                        <span class="nav-label">Logout</span>
-                    </a>
+                    <form action="../auth/logout.php" method="POST">
+                        <?php echo csrf_field(); ?>
+                        <button class="nav-link border-0 bg-transparent w-100 text-start" type="submit">
+                            <span class="nav-icon text-warning"><i class="bi bi-box-arrow-right"></i></span>
+                            <span class="nav-label">Logout</span>
+                        </button>
+                    </form>
                 </li>
             </ul>
         </div>
@@ -68,7 +71,7 @@
                 <div class="avatar">MT</div>
                 <div class="profile-meta">
                     <div class="profile-title">Signed in</div>
-                    <div class="profile-subtitle"><?php echo htmlspecialchars($_SESSION['email'] ?? ''); ?></div>
+                    <div class="profile-subtitle"><?php echo e($_SESSION['email'] ?? ''); ?></div>
                 </div>
             </div>
         </div>
