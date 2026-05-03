@@ -1,0 +1,113 @@
+# Security Headers and Configuration
+# Implements OWASP A05: Security Misconfiguration protections
+
+# Prevent directory listing
+Options -Indexes
+
+# Disable server signature
+ServerSignature Off
+
+# Protect sensitive files
+<FilesMatch "^\.">
+    Require all denied
+</FilesMatch>
+
+<FilesMatch "\.(env|log|key|pem|crt|p12|sql|backup|dump)$">
+    Require all denied
+</FilesMatch>
+
+<FilesMatch "(config|database|secret|private)\.(php|json|xml|yml|yaml)$">
+    Require all denied
+</FilesMatch>
+
+# Protect configuration files
+<Files "setup.php">
+    Require all denied
+</Files>
+
+# Restrict access to logs directory
+<Directory "logs">
+    Require all denied
+</Directory>
+
+# PHP security settings
+<IfModule mod_php7.c>
+    php_flag display_errors Off
+    php_flag log_errors On
+    php_value max_execution_time 30
+    php_value memory_limit 256M
+    php_value upload_max_filesize 5M
+    php_value post_max_size 10M
+    php_value session.cookie_httponly 1
+    php_value session.cookie_secure 1
+    php_value session.use_only_cookies 1
+    php_value session.cookie_samesite Strict
+</IfModule>
+
+<IfModule mod_php8.c>
+    php_flag display_errors Off
+    php_flag log_errors On
+    php_value max_execution_time 30
+    php_value memory_limit 256M
+    php_value upload_max_filesize 5M
+    php_value post_max_size 10M
+    php_value session.cookie_httponly 1
+    php_value session.cookie_secure 1
+    php_value session.use_only_cookies 1
+    php_value session.cookie_samesite Strict
+</IfModule>
+
+# Security Headers
+<IfModule mod_headers.c>
+    Header always set X-Frame-Options DENY
+    Header always set X-Content-Type-Options nosniff
+    Header always set X-XSS-Protection "1; mode=block"
+    Header always set Referrer-Policy "strict-origin-when-cross-origin"
+    Header always set Permissions-Policy "camera=(), microphone=(), geolocation=(), payment=()"
+    Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains; preload"
+    Header always set Content-Security-Policy "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https:; font-src 'self'; connect-src 'self'; frame-ancestors 'none';"
+    
+    # Remove server information
+    Header always unset Server
+    Header always unset X-Powered-By
+</IfModule>
+
+# Request filtering
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # Block suspicious user agents
+    RewriteCond %{HTTP_USER_AGENT} (curl|wget|python-requests|bot|crawler|spider|scraper) [NC,OR]
+    RewriteCond %{HTTP_USER_AGENT} (sqlmap|nikto|nmap|masscan) [NC]
+    RewriteRule .* - [F,L]
+    
+    # Block common attack patterns
+    RewriteCond %{QUERY_STRING} (<|%3C).*script.*(>|%3E) [NC,OR]
+    RewriteCond %{QUERY_STRING} UNION.*SELECT [NC,OR]
+    RewriteCond %{QUERY_STRING} (javascript:|vbscript:|data:) [NC,OR]
+    RewriteCond %{QUERY_STRING} (\.\./|\.\.\\) [NC]
+    RewriteRule .* - [F,L]
+    
+    # Prevent access to sensitive files
+    RewriteRule ^(\.env|\.htaccess|\.git|composer\.(json|lock))$ - [F,L]
+    RewriteRule ^(logs/|config/) - [F,L]
+</IfModule>
+
+# File upload restrictions
+<FilesMatch "\.(php|phtml|php3|php4|php5|pl|py|cgi|sh|exe)$">
+    Require all denied
+</FilesMatch>
+
+# Limit request size
+LimitRequestBody 10485760
+
+# Connection limits
+MaxKeepAliveRequests 100
+KeepAliveTimeout 5
+
+# MIME type restrictions
+<IfModule mod_mime.c>
+    AddType application/octet-stream .exe .dll .so .dl
+    AddType application/octet-stream .bat .cmd .scr .pif
+    AddType application/octet-stream .reg .inf .vbs .js
+</IfModule>
